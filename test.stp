@@ -1,0 +1,94 @@
+global count 
+global start0, start1, start2, start3, start4, start5, start6, start7, start8, start9, start10, start11
+global sys_start, sys_end
+
+/*
+probe kernel.function("__x64_sys_mprotect")
+{
+	curr_cpu = cpu();
+	if (curr_cpu == 0) start0 = gettimeofday_us();
+	else if (curr_cpu == 1) start1 = gettimeofday_us();
+	else if (curr_cpu == 2) start2 = gettimeofday_us();
+	else if (curr_cpu == 3) start3 = gettimeofday_us();
+	else if (curr_cpu == 4) start4 = gettimeofday_us();
+	else if (curr_cpu == 5) start5 = gettimeofday_us();
+	else if (curr_cpu == 6) start6 = gettimeofday_us();
+	else if (curr_cpu == 7) start7 = gettimeofday_us();
+	else if (curr_cpu == 8) start8 = gettimeofday_us();
+	else if (curr_cpu == 9) start9 = gettimeofday_us();
+	else if (curr_cpu == 10) start10 = gettimeofday_us();
+	else if (curr_cpu == 11) start11 = gettimeofday_us();
+	else exit()
+	count++
+}
+*/
+
+/*
+probe kernel.function("__x64_sys_mprotect").return
+{
+	curr_cpu = cpu();
+	delta = gettimeofday_us();
+	if (curr_cpu == 0) delta = delta - start0;
+	else if (curr_cpu == 1) delta = delta - start1;
+	else if (curr_cpu == 2) delta = delta - start2;
+	else if (curr_cpu == 3) delta = delta - start3;
+	else if (curr_cpu == 4) delta = delta - start4;
+	else if (curr_cpu == 5) delta = delta - start5;
+	else if (curr_cpu == 6) delta = delta - start6;
+	else if (curr_cpu == 7) delta = delta - start7;
+	else if (curr_cpu == 8) delta = delta - start8;
+	else if (curr_cpu == 9) delta = delta - start9;
+	else if (curr_cpu == 10) delta = delta - start10;
+	else if (curr_cpu == 11) delta = delta - start11;
+	else exit(); 
+	printf("delta: %lu\n", delta);
+	//before = gettimeofday_us();
+	udelay(delta * 2);
+	//printf("delta 2:  %lu\n", gettimeofday_us() - before);
+}
+*/
+
+probe syscall.mprotect {
+	curr_cpu = cpu();
+	if (curr_cpu == 0) start0 = gettimeofday_us();
+	else if (curr_cpu == 1) start1 = gettimeofday_us();
+	else if (curr_cpu == 2) start2 = gettimeofday_us();
+	else if (curr_cpu == 3) start3 = gettimeofday_us();
+	else if (curr_cpu == 4) start4 = gettimeofday_us();
+	else if (curr_cpu == 5) start5 = gettimeofday_us();
+	else if (curr_cpu == 6) start6 = gettimeofday_us();
+	else if (curr_cpu == 7) start7 = gettimeofday_us();
+	else if (curr_cpu == 8) start8 = gettimeofday_us();
+	else if (curr_cpu == 9) start9 = gettimeofday_us();
+	else if (curr_cpu == 10) start10 = gettimeofday_us();
+	else if (curr_cpu == 11) start11 = gettimeofday_us();
+	else exit()
+	count++
+}
+
+probe syscall.mprotect.return {
+	curr_cpu = cpu();
+	delta = gettimeofday_us();
+	if (curr_cpu == 0) delta = delta - start0;
+	else if (curr_cpu == 1) delta = delta - start1;
+	else if (curr_cpu == 2) delta = delta - start2;
+	else if (curr_cpu == 3) delta = delta - start3;
+	else if (curr_cpu == 4) delta = delta - start4;
+	else if (curr_cpu == 5) delta = delta - start5;
+	else if (curr_cpu == 6) delta = delta - start6;
+	else if (curr_cpu == 7) delta = delta - start7;
+	else if (curr_cpu == 8) delta = delta - start8;
+	else if (curr_cpu == 9) delta = delta - start9;
+	else if (curr_cpu == 10) delta = delta - start10;
+	else if (curr_cpu == 11) delta = delta - start11;
+	else exit(); 
+	//printf("delta: %lu\n", delta);
+	//before = gettimeofday_us();
+	udelay(delta * 2);
+	//printf("delta2: %lu\n", gettimeofday_us() - before)
+}
+
+probe end
+{
+	printf("\n OBSERVED mprotects: %lu \n", count);
+}

@@ -1,0 +1,10 @@
+global start, end
+
+probe syscall.mprotect {
+	start = get_cycles();
+}
+
+probe syscall.mprotect.return {
+	end = get_cycles();
+	printf("%lu\n", end - start);
+}
